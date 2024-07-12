@@ -29,7 +29,7 @@
     "vitest": "file:./vitest"
   },
   "prettier": {
-    "printWidth": 200,
+    "printWidth": 80,
     "semi": false,
     "tabWidth": 2,
     "bracketSpacing": true,

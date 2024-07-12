@@ -1,10 +1,11 @@
 import { useState } from 'react'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import { api } from './manager/api/ApiManager'
+import { IResGetUsers, reqGetUesr } from './api/endpoint/reqres_in/users.get'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [users, setUsers] = useState<IResGetUsers['data']>([])
 
   return (
     <>
@@ -19,16 +20,14 @@ function App() {
         <button
           onClick={() => {
             setCount((count) => count + 1)
+            reqGetUesr({ params: { page: 1 } })
+              .then((res) => setUsers(res.data.data))
+              .catch(() => {})
 
-            api.reqresIn
-              .get('/users?page=1')
-              .then((d) => console.log(d))
-              .catch((e) => console.log(e))
-
-            api.base
-              .get('/users?page=1')
-              .then((d) => console.log(d))
-              .catch((e) => console.log(e))
+            // api.reqresIn
+            //   .get<IResGetUsers>('/users', { params: { page: 1 } })
+            //   .then(({ data: { data } }) => setUsers(data))
+            //   .catch(() => {})
           }}
         >
           count is {count}
@@ -36,8 +35,15 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <div>
+          <pre style={{ textAlign: 'left' }}>
+            {JSON.stringify(users, null, 2)}
+          </pre>
+        </div>
       </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
+      <p className='read-the-docs'>
+        Click on the Vite and React logos to learn more
+      </p>
     </>
   )
 }
